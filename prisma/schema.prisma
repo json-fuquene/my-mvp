@@ -1,14 +1,33 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+}
+
+model Asset {
+  id        Int         @id @default(autoincrement())
+  symbol    String      @unique
+  name      String
+  type      String      // "stock" | "etf" | "crypto"
+  createdAt DateTime    @default(now())
+
+  operations Operation[]
+}
+
+model Operation {
+  id          Int      @id @default(autoincrement())
+  assetSymbol String
+  type        String   // "buy" | "sell"
+  quantity    Float
+  price       Float
+  currency    String   // "USD" | "COP"
+  trm         Float
+  commission  Float    @default(0)
+  date        DateTime
+  createdAt   DateTime @default(now())
+
+  asset Asset @relation(fields: [assetSymbol], references: [symbol])
 }
