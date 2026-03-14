@@ -66,7 +66,20 @@ export async function getPortafolio() {
     include: { asset: true },
     orderBy: { date: 'asc' }
   })
-  return calcularPortafolio(operaciones, {})
+
+  // Obtener símbolos únicos del portafolio
+  const symbols = [...new Set(operaciones.map(op => op.assetSymbol))]
+
+  // Obtener precios actuales
+  let precios = {}
+  try {
+    const { obtenerPrecios } = await import('@/lib/precios')
+    precios = await obtenerPrecios(symbols)
+  } catch (error) {
+    console.warn('No se pudieron obtener precios:', error.message)
+  }
+
+  return calcularPortafolio(operaciones, precios)
 }
 
 export async function getOperacionesPorActivo(symbol) {

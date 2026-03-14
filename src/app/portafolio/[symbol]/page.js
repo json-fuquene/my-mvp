@@ -58,10 +58,14 @@ export default async function ActivoPage({ params }) {
             color="gray"
           />
           <TarjetaMetrica
+            titulo="Precio actual (USD)"
+            valor={formatearUSD(posicion.currentPrice)}
+            color="gray"
+          />
+          <TarjetaMetrica
             titulo="Valor actual (USD)"
             valor={formatearUSD(posicion.currentValueUSD)}
-            subtitulo="Disponible con precios en vivo"
-            color="gray"
+            color={posicion.profitLossUSD >= 0 ? 'green' : 'red'}
           />
           <TarjetaMetrica
             titulo="Rentabilidad"
