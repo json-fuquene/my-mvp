@@ -168,3 +168,12 @@ export async function exportarCSV() {
 
   return filas.join('\n')
 }
+
+// Eliminar operacion
+export async function eliminarOperacion(id) {
+  await prisma.operation.delete({
+    where: { id: parseInt(id) }
+  })
+  revalidatePath('/operaciones')
+  revalidatePath('/portafolio')
+}

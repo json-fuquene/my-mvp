@@ -2,6 +2,7 @@ import { getOperacionesPorActivo, getActivo, getPortafolio } from '@/lib/actions
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import TarjetaMetrica from '@/components/TarjetaMetrica'
+import BotonEliminar from '@/app/operaciones/BotonEliminar'
 import {
   formatearUSD,
   formatearCOP,
@@ -48,27 +49,28 @@ export default async function ActivoPage({ params }) {
             color="blue"
           />
           <TarjetaMetrica
-            titulo="Costo total (USD)"
-            valor={formatearUSD(posicion.totalCostUSD)}
-            color="blue"
-          />
-          <TarjetaMetrica
-            titulo="Costo total (COP)"
-            valor={formatearCOP(posicion.totalCostCOP)}
-            color="gray"
-          />
-          <TarjetaMetrica
             titulo="Precio actual (USD)"
             valor={formatearUSD(posicion.currentPrice)}
             color="gray"
           />
           <TarjetaMetrica
-            titulo="Valor actual (USD)"
+            titulo="Total (USD)"
+            valor={formatearUSD(posicion.totalCostUSD)}
+            color="blue"
+          />
+          <TarjetaMetrica
+            titulo="Total (COP)"
+            valor={formatearCOP(posicion.totalCostCOP)}
+            color="gray"
+          />
+          
+          <TarjetaMetrica
+            titulo="Precio actual (USD)"
             valor={formatearUSD(posicion.currentValueUSD)}
             color={posicion.profitLossUSD >= 0 ? 'green' : 'red'}
           />
           <TarjetaMetrica
-            titulo="Valor actual (COP)"
+            titulo="Precio actual (COP)"
             valor={formatearCOP(posicion.currentValueCOP)}
             color={posicion.profitLossUSD >= 0 ? 'green' : 'red'}
           />
@@ -79,9 +81,13 @@ export default async function ActivoPage({ params }) {
             color={posicion.profitLossCOP > 0 ? 'green' : posicion.profitLossCOP < 0 ? 'red' : 'gray'}
           />
           <TarjetaMetrica
-            titulo="Rentabilidad"
+            titulo="Rentabilidad (USD)"
+            valor={formatearUSD(posicion.profitLossUSD)}
+            color={posicion.profitLossUSD > 0 ? 'green' : posicion.profitLossUSD < 0 ? 'red' : 'gray'}
+          />
+          <TarjetaMetrica
+            titulo="Rentabilidad (%)"
             valor={formatearPorcentaje(posicion.profitLossPct)}
-            subtitulo={formatearUSD(posicion.profitLossUSD)}
             color={posicion.profitLossPct > 0 ? 'green' : posicion.profitLossPct < 0 ? 'red' : 'gray'}
           />
         </section>
@@ -108,6 +114,7 @@ export default async function ActivoPage({ params }) {
                   <th className="p-3 border-b text-right">Total USD</th>
                   <th className="p-3 border-b text-right">TRM</th>
                   <th className="p-3 border-b text-right">Total COP</th>
+                  <th className="p-3 border-b"></th>
                 </tr>
               </thead>
               <tbody>
@@ -144,6 +151,9 @@ export default async function ActivoPage({ params }) {
                       </td>
                       <td className="p-3 border-b text-right">
                         {formatearCOP(totalCOP)}
+                      </td>
+                      <td className="p-3 border-b text-center">
+                        <BotonEliminar id={op.id} />
                       </td>
                     </tr>
                   )

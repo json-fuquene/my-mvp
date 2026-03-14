@@ -12,12 +12,6 @@ export default async function OperacionesPage() {
         <h1 className="text-2xl font-bold">Historial de operaciones</h1>
         <div className="flex gap-2">
           <BotonExportar />
-          <Link
-            href="/operaciones/nueva"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
-          >
-            + Nueva operación
-          </Link>
         </div>
       </div>
 
