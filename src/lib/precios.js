@@ -86,3 +86,33 @@ async function fetchYahooFinance(symbols) {
 
   return precios
 }
+// ── TRM (Banco de la República) ───────────────────────────────────────
+
+export async function obtenerTRMActual() {
+  try {
+    // API oficial del Banco de la República
+    const hoy = new Date()
+    const fecha = hoy.toISOString().split('T')[0] // formato YYYY-MM-DD
+
+    const url = `https://www.banrep.gov.co/es/estadisticas/trm?field_consulta_date_value=${fecha}`
+
+    // Usamos una API alternativa más confiable para JSON
+    const urlAPI = `https://api.exchangerate-api.com/v4/latest/USD`
+
+    const res = await fetch(urlAPI, {
+      next: { revalidate: 3600 } // cache de 1 hora
+    })
+
+    if (!res.ok) throw new Error(`Error TRM: ${res.status}`)
+
+    const data = await res.json()
+    const trm = data?.rates?.COP
+
+    if (!trm) throw new Error('TRM no disponible')
+
+    return trm
+  } catch (error) {
+    console.warn('No se pudo obtener TRM:', error.message)
+    return null
+  }
+}

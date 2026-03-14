@@ -67,19 +67,60 @@ export async function getPortafolio() {
     orderBy: { date: 'asc' }
   })
 
-  // Obtener símbolos únicos del portafolio
+  // Obtener símbolos únicos
   const symbols = [...new Set(operaciones.map(op => op.assetSymbol))]
 
-  // Obtener precios actuales
+  // Obtener precios y TRM en paralelo
   let precios = {}
+  let trmActual = null
+
   try {
-    const { obtenerPrecios } = await import('@/lib/precios')
-    precios = await obtenerPrecios(symbols)
+    const { obtenerPrecios, obtenerTRMActual } = await import('@/lib/precios')
+    ;[precios, trmActual] = await Promise.all([
+      obtenerPrecios(symbols),
+      obtenerTRMActual()
+    ])
   } catch (error) {
-    console.warn('No se pudieron obtener precios:', error.message)
+    console.warn('Error obteniendo datos externos:', error.message)
   }
 
-  return calcularPortafolio(operaciones, precios)
+  const portafolio = calcularPortafolio(operaciones, precios)
+
+  // Agregar conversión COP al resumen y posiciones
+  return enriquecerConCOP(portafolio, trmActual)
+}
+
+function enriquecerConCOP(portafolio, trmActual) {
+  const { positions, summary } = portafolio
+
+  // Enriquecer cada posición
+  const positionsEnriquecidas = positions.map(pos => ({
+    ...pos,
+    currentValueCOP: pos.currentValueUSD !== null && trmActual
+      ? Math.round(pos.currentValueUSD * trmActual)
+      : null,
+    profitLossCOP: pos.profitLossUSD !== null && trmActual
+      ? Math.round(pos.profitLossUSD * trmActual)
+      : null,
+    trmActual
+  }))
+
+  // Enriquecer resumen
+  const summaryEnriquecido = {
+    ...summary,
+    trmActual,
+    totalCurrentValueCOP: summary.totalCurrentValueUSD !== null && trmActual
+      ? Math.round(summary.totalCurrentValueUSD * trmActual)
+      : null,
+    totalProfitLossCOP: summary.totalProfitLossUSD !== null && trmActual
+      ? Math.round(summary.totalProfitLossUSD * trmActual)
+      : null
+  }
+
+  return {
+    positions: positionsEnriquecidas,
+    summary: summaryEnriquecido
+  }
 }
 
 export async function getOperacionesPorActivo(symbol) {

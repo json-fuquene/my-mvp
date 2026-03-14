@@ -34,3 +34,12 @@ export function colorRentabilidad(valor) {
   if (valor < 0) return 'text-red-600'
   return 'text-gray-600'
 }
+
+export function formatearTRM(valor) {
+  if (!valor) return '—'
+  return new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 2
+  }).format(valor)
+}

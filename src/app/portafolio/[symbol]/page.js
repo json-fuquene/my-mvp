@@ -68,6 +68,17 @@ export default async function ActivoPage({ params }) {
             color={posicion.profitLossUSD >= 0 ? 'green' : 'red'}
           />
           <TarjetaMetrica
+            titulo="Valor actual (COP)"
+            valor={formatearCOP(posicion.currentValueCOP)}
+            color={posicion.profitLossUSD >= 0 ? 'green' : 'red'}
+          />
+          <TarjetaMetrica
+            titulo="Rentabilidad (COP)"
+            valor={formatearCOP(posicion.profitLossCOP)}
+            subtitulo={`TRM: ${posicion.trmActual ? posicion.trmActual.toFixed(2) : '—'}`}
+            color={posicion.profitLossCOP > 0 ? 'green' : posicion.profitLossCOP < 0 ? 'red' : 'gray'}
+          />
+          <TarjetaMetrica
             titulo="Rentabilidad"
             valor={formatearPorcentaje(posicion.profitLossPct)}
             subtitulo={formatearUSD(posicion.profitLossUSD)}
