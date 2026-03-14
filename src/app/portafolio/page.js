@@ -71,9 +71,9 @@ export default async function PortafolioPage() {
                 <th className="p-3 border-b">Activo</th>
                 <th className="p-3 border-b">Tipo</th>
                 <th className="p-3 border-b text-right">Cantidad</th>
-                <th className="p-3 border-b text-right">Precio prom.</th>
-                <th className="p-3 border-b text-right">Costo total USD</th>
-                <th className="p-3 border-b text-right">Costo total COP</th>
+                <th className="p-3 border-b text-right">Precio actual</th>
+                <th className="p-3 border-b text-right">Total USD</th>
+                <th className="p-3 border-b text-right">Total COP</th>
                 <th className="p-3 border-b text-right">Exposición</th>
                 <th className="p-3 border-b text-right">Rentabilidad</th>
             </tr>
@@ -95,7 +95,7 @@ export default async function PortafolioPage() {
                     {formatearCantidad(pos.quantity)}
                 </td>
                 <td className="p-3 border-b text-right">
-                    {formatearUSD(pos.avgPrice)}
+                    {formatearUSD(pos.currentPrice)}
                 </td>
                 <td className="p-3 border-b text-right">
                     {formatearUSD(pos.totalCostUSD)}
