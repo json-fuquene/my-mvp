@@ -3,14 +3,14 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 const COLORES = [
-  '#3b82f6', // blue
-  '#10b981', // green
-  '#f59e0b', // amber
-  '#ef4444', // red
-  '#8b5cf6', // violet
-  '#06b6d4', // cyan
-  '#f97316', // orange
-  '#84cc16', // lime
+  '#6EEDB2', // menta marca
+  '#A8D8EA', // azul pastel
+  '#FFD6A5', // naranja pastel
+  '#FDFFB6', // amarillo pastel
+  '#C9B8E8', // violeta pastel
+  '#FFB3C6', // rosa pastel
+  '#B5EAD7', // verde pastel
+  '#AEC6CF', // gris azulado pastel
 ]
 
 export default function GraficaDistribucion({ positions }) {

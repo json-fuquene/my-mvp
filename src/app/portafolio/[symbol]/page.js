@@ -37,15 +37,11 @@ export default async function ActivoPage({ params }) {
 
       {/* Métricas de la posición */}
       {posicion ? (
-        <section className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <section className="grid grid-cols-2 md:grid-cols-2 gap-4">
           <TarjetaMetrica
             titulo="Valor actual (USD)"
             valor={formatearUSD(posicion.currentValueUSD)}
-            color={posicion.profitLossUSD >= 0 ? 'green' : 'red'}
-          />
-          <TarjetaMetrica
-            titulo="Valor actual (COP)"
-            valor={formatearCOP(posicion.currentValueCOP)}
+            subtitulo={formatearCOP(posicion.currentValueCOP)}
             color={posicion.profitLossUSD >= 0 ? 'green' : 'red'}
           />
           <TarjetaMetrica
@@ -56,11 +52,7 @@ export default async function ActivoPage({ params }) {
           <TarjetaMetrica
             titulo="Total compra(USD)"
             valor={formatearUSD(posicion.totalCostUSD)}
-            color="white"
-          />
-          <TarjetaMetrica
-            titulo="Total compra(COP)"
-            valor={formatearCOP(posicion.totalCostCOP)}
+            subtitulo={formatearCOP(posicion.totalCostCOP)}
             color="white"
           />
           <TarjetaMetrica
@@ -71,13 +63,8 @@ export default async function ActivoPage({ params }) {
           <TarjetaMetrica
             titulo="Rentabilidad (USD)"
             valor={formatearUSD(posicion.profitLossUSD)}
+            subtitulo={formatearCOP(posicion.profitLossCOP)}
             color={posicion.profitLossUSD > 0 ? 'green' : posicion.profitLossUSD < 0 ? 'red' : 'white'}
-          />
-          <TarjetaMetrica
-            titulo="Rentabilidad (COP)"
-            valor={formatearCOP(posicion.profitLossCOP)}
-            subtitulo={`TRM: ${posicion.trmActual ? posicion.trmActual.toFixed(2) : '—'}`}
-            color={posicion.profitLossCOP > 0 ? 'green' : posicion.profitLossCOP < 0 ? 'red' : 'white'}
           />
           <TarjetaMetrica
             titulo="Rentabilidad (%)"
