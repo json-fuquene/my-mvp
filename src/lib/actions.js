@@ -177,3 +177,9 @@ export async function eliminarOperacion(id) {
   revalidatePath('/operaciones')
   revalidatePath('/portafolio')
 }
+
+export async function getTRMActual() {
+  const { obtenerTRMActual } = await import('@/lib/precios')
+  const trm = await obtenerTRMActual()
+  return trm
+}

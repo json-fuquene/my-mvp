@@ -1,9 +1,11 @@
 import Link from 'next/link'
-import { getActivos, crearOperacion, crearActivo } from '@/lib/actions'
+import { getActivos, crearOperacion, crearActivo, getTRMActual } from '@/lib/actions'
 import FormularioOperacion from './FormularioOperacion'
 
 export default async function NuevaOperacionPage() {
   const activos = await getActivos()
+  const trmActual = await getTRMActual()
+  const fechaHoy = new Date().toISOString().split('T')[0]
 
   return (
     <main className="max-w-xl mx-auto p-6">
@@ -18,6 +20,8 @@ export default async function NuevaOperacionPage() {
           activos={activos}
           crearOperacion={crearOperacion}
           crearActivo={crearActivo}
+          trmInicial={trmActual}
+          fechaInicial={fechaHoy}
         />
       </div>
     </main>

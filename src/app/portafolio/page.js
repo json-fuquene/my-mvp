@@ -15,140 +15,139 @@ export default async function PortafolioPage() {
   const { positions, summary } = await getPortafolio()
 
   return (
-    <main className="max-w-5xl mx-auto p-6 space-y-8">
+    <div className="max-w-3xl sm:max-w-4xl xl:max-w-6xl 2xl:max-w-screen-2xl mx-auto px-6 py-8 space-y-8">
 
-    {/* Título */}
-    <h1 className="text-2xl font-bold">Dashboard</h1>
+      {/* Título */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-sm text-gray-400 mt-1">
+            TRM actual:{' '}
+            <span className="font-medium text-gray-600">
+              {summary.trmActual ? formatearTRM(summary.trmActual) : '—'}
+            </span>
+          </p>
+        </div>
+      </div>
 
-    {/* TRM actual */}
-    <div className="flex items-center gap-2 text-sm text-gray-500">
-    <span>TRM actual:</span>
-    <span className="font-medium text-gray-700">
-        {summary.trmActual
-        ? formatearTRM(summary.trmActual)
-        : '—'}
-    </span>
-    <span className="text-xs text-gray-400">(actualizada cada hora)</span>
-    </div>
+      {/* Tarjetas de resumen */}
+      <section className="grid grid-cols-2 md:grid-cols-4 2xl:grid-cols-4 gap-4 2xl:gap-6">
+        <TarjetaMetrica
+          titulo="Total invertido"
+          valor={formatearUSD(summary.totalCostUSD)}
+          subtitulo={formatearCOP(summary.totalCostCOP)}
+          color="blue"
+        />
+        <TarjetaMetrica
+          titulo="Valor actual"
+          valor={formatearUSD(summary.totalCurrentValueUSD)}
+          subtitulo={formatearCOP(summary.totalCurrentValueCOP)}
+          color="gray"
+        />
+        <TarjetaMetrica
+          titulo="Rentabilidad"
+          valor={formatearPorcentaje(summary.totalProfitLossPct)}
+          subtitulo={formatearUSD(summary.totalProfitLossUSD)}
+          color={summary.totalProfitLossPct > 0 ? 'green' : summary.totalProfitLossPct < 0 ? 'red' : 'gray'}
+        />
+        <TarjetaMetrica
+          titulo="Posiciones activas"
+          valor={positions.length}
+          color="gray"
+        />
+      </section>
 
-    {/* Tarjetas de resumen */}
-    <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <TarjetaMetrica
-        titulo="Total invertido (USD)"
-        valor={formatearUSD(summary.totalCostUSD)}
-        color="blue"
-    />
-    <TarjetaMetrica
-        titulo="Total invertido (COP)"
-        valor={formatearCOP(summary.totalCostCOP)}
-        color="blue"
-    />
-    <TarjetaMetrica
-        titulo="Valor actual (USD)"
-        valor={formatearUSD(summary.totalCurrentValueUSD)}
-        subtitulo={formatearCOP(summary.totalCurrentValueCOP)}
-        color="gray"
-    />
-    <TarjetaMetrica
-        titulo="Rentabilidad total"
-        valor={formatearPorcentaje(summary.totalProfitLossPct)}
-        subtitulo={`${formatearUSD(summary.totalProfitLossUSD)} · ${formatearCOP(summary.totalProfitLossCOP)}`}
-        color={summary.totalProfitLossPct > 0 ? 'green' : summary.totalProfitLossPct < 0 ? 'red' : 'gray'}
-    />
-    </section>
+      {/* Tabla + Gráfica lado a lado */}
+      <section className="grid grid-cols-1 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
 
-    {/* Tabla de posiciones */}
-    <section>
-    <h2 className="text-lg font-semibold mb-3">Posiciones actuales</h2>
+        {/* Tabla de posiciones — ocupa 2/3 */}
+        <div className="lg:col-span-2 2xl:col-span-3 bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+          <div className="px-6 py-4 border-b border-gray-50">
+            <h2 className="text-base font-semibold text-gray-800">Posiciones actuales</h2>
+          </div>
 
-    {positions.length === 0 ? (
-        <p className="text-gray-500">No hay posiciones activas.</p>
-    ) : (
-        <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm">
-            <thead>
-            <tr className="bg-gray-100 text-left text-sm">
-                <th className="p-3 border-b">Activo</th>
-                <th className="p-3 border-b">Tipo</th>
-                <th className="p-3 border-b text-right">Cantidad</th>
-                <th className="p-3 border-b text-right">Precio actual</th>
-                <th className="p-3 border-b text-right">Total USD</th>
-                <th className="p-3 border-b text-right">Total COP</th>
-                <th className="p-3 border-b text-right">Exposición</th>
-                <th className="p-3 border-b text-right">Rentabilidad</th>
-            </tr>
-            </thead>
-            <tbody>
-            {positions.map((pos) => (
-                <tr key={pos.symbol} className="hover:bg-gray-50 text-sm">
-                <td className="p-3 border-b">
-                    <Link
-                        href={`/portafolio/${pos.symbol}`}
-                        className="font-bold hover:text-blue-600"
-                    >
-                        {pos.symbol}
-                    </Link>
-                    <span className="text-gray-400 ml-2 text-xs">{pos.name}</span>
-                    </td>
-                <td className="p-3 border-b text-gray-500 capitalize">{pos.type}</td>
-                <td className="p-3 border-b text-right font-mono">
-                    {formatearCantidad(pos.quantity)}
-                </td>
-                <td className="p-3 border-b text-right">
-                    {formatearUSD(pos.currentPrice)}
-                </td>
-                <td className="p-3 border-b text-right">
-                    {formatearUSD(pos.totalCostUSD)}
-                </td>
-                <td className="p-3 border-b text-right">
-                    {formatearCOP(pos.totalCostCOP)}
-                </td>
-                <td className="p-3 border-b text-right">
-                    {formatearPorcentaje(pos.exposurePct)}
-                </td>
-                <td className={`p-3 border-b text-right font-medium ${colorRentabilidad(pos.profitLossPct)}`}>
-                    {formatearPorcentaje(pos.profitLossPct)}
-                </td>
+          {positions.length === 0 ? (
+            <p className="text-gray-400 text-sm p-6">No hay posiciones activas.</p>
+          ) : (
+            <table className="w-full min-w-[700px]">
+              <thead>
+                <tr className="bg-violet-50">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-violet-600 uppercase tracking-wide">Activo</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Cantidad</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Precio actual</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Valor (USD)</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Exposición</th>
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Rentabilidad</th>
                 </tr>
-            ))}
-            </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {positions.map((pos, i) => (
+                  <tr
+                    key={pos.symbol}
+                    className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}
+                  >
+                    <td className="px-6 py-4">
+                      <Link href={`/portafolio/${pos.symbol}`} className="hover:text-violet-600">
+                        <span className="font-semibold text-gray-900">{pos.symbol}</span>
+                        <span className="text-gray-400 text-xs ml-2">{pos.name}</span>
+                      </Link>
+                    </td>
+                    <td className="px-4 py-4 text-right text-sm text-gray-600 font-mono">
+                      {formatearCantidad(pos.quantity)}
+                    </td>
+                    <td className="px-4 py-4 text-right text-sm text-gray-600">
+                      {formatearUSD(pos.currentPrice)}
+                    </td>
+                    <td className="px-4 py-4 text-right text-sm font-medium text-gray-800">
+                      {formatearUSD(pos.currentValueUSD)}
+                    </td>
+                    <td className="px-4 py-4 text-right text-sm text-gray-500">
+                      {formatearPorcentaje(pos.exposurePct)}
+                    </td>
+                    <td className={`px-6 py-4 text-right text-sm font-semibold ${colorRentabilidad(pos.profitLossPct)}`}>
+                      {formatearPorcentaje(pos.profitLossPct)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          </div>
         </div>
-    )}
-    </section>
-    
-    {/* Gráfica de distribución */}
-    {positions.length > 0 && (
-    <section>
-        <h2 className="text-lg font-semibold mb-3">Distribución del portafolio</h2>
-        <div className="bg-white rounded-lg shadow-sm p-6">
-        <GraficaDistribucion positions={positions} />
-        </div>
-    </section>
-    )}
 
-    {/* Distribución por tipo de activo */}
-    <section>
-    <h2 className="text-lg font-semibold mb-3">Distribución por tipo</h2>
-    <div className="flex gap-4 flex-wrap">
-        {['stock', 'etf', 'crypto'].map(tipo => {
-        const posicionesTipo = positions.filter(p => p.type === tipo)
-        if (posicionesTipo.length === 0) return null
-        const costoTipo = posicionesTipo.reduce((sum, p) => sum + p.totalCostUSD, 0)
-        const pct = summary.totalCostUSD > 0
-            ? ((costoTipo / summary.totalCostUSD) * 100).toFixed(1)
-            : 0
-        return (
-            <div key={tipo} className="bg-white border rounded-lg p-4 min-w-32">
-            <p className="text-sm text-gray-500 capitalize">{tipo}</p>
-            <p className="text-xl font-bold">{pct}%</p>
-            <p className="text-xs text-gray-400">{formatearUSD(costoTipo)}</p>
-            </div>
-        )
-        })}
+        {/* Gráfica — ocupa 1/3 */}
+        {positions.length > 0 && (
+          <div className="bg-white rounded-2xl shadow-sm p-6">
+            <h2 className="text-base font-semibold text-gray-800 mb-4">Distribución</h2>
+            <GraficaDistribucion positions={positions} />
+          </div>
+        )}
+
+      </section>
+
+      {/* Distribución por tipo */}
+      <section>
+        <h2 className="text-base font-semibold text-gray-800 mb-3">Por tipo de activo</h2>
+        <div className="flex gap-3 flex-wrap">
+          {['stock', 'etf', 'crypto'].map(tipo => {
+            const posicionesTipo = positions.filter(p => p.type === tipo)
+            if (posicionesTipo.length === 0) return null
+            const costoTipo = posicionesTipo.reduce((sum, p) => sum + p.totalCostUSD, 0)
+            const pct = summary.totalCostUSD > 0
+              ? ((costoTipo / summary.totalCostUSD) * 100).toFixed(1)
+              : 0
+            return (
+              <div key={tipo} className="bg-white rounded-2xl shadow-sm px-5 py-4 min-w-36">
+                <p className="text-xs text-gray-400 uppercase tracking-wide capitalize">{tipo}</p>
+                <p className="text-2xl font-bold text-gray-800 mt-1">{pct}%</p>
+                <p className="text-xs text-gray-400 mt-1">{formatearUSD(costoTipo)}</p>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
     </div>
-    </section>
-
-    </main>
   )
 }

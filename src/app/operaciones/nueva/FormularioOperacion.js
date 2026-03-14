@@ -2,17 +2,18 @@
 
 import { useState } from 'react'
 
-export default function FormularioOperacion({ activos, crearOperacion, crearActivo }) {
+export default function FormularioOperacion({ activos, crearOperacion, crearActivo, trmInicial, fechaInicial }) {
   const [mostrarNuevoActivo, setMostrarNuevoActivo] = useState(false)
   const [listaActivos, setListaActivos]             = useState(activos)
-
   const [activoSeleccionado, setActivoSeleccionado] = useState('')
+  const [tipo, setTipo]                             = useState('')
   const [precioUSD, setPrecioUSD]                   = useState('')
   const [precioCOP, setPrecioCOP]                   = useState('')
   const [totalUSD, setTotalUSD]                     = useState('')
   const [totalCOP, setTotalCOP]                     = useState('')
   const [cantidad, setCantidad]                     = useState('')
-  const [trm, setTrm]                               = useState('')
+  const [trm, setTrm]     = useState(trmInicial?.toString() ?? '')
+  const fecha = fechaInicial ?? new Date().toISOString().split('T')[0]
 
   // ── Helpers ──────────────────────────────────────────────────────────
 
@@ -24,22 +25,6 @@ export default function FormularioOperacion({ activos, crearOperacion, crearActi
     } else {
       setCantidad('')
     }
-  }
-
-  // ── TRM ──────────────────────────────────────────────────────────────
-
-  function handleTRMChange(e) {
-    const val = e.target.value
-    setTrm(val)
-    const t = parseFloat(val)
-
-    // Actualiza precio COP si hay precio USD
-    const p = parseFloat(precioUSD)
-    if (!isNaN(p) && !isNaN(t)) setPrecioCOP(Math.round(p * t).toString())
-
-    // Actualiza total COP si hay total USD
-    const v = parseFloat(totalUSD)
-    if (!isNaN(v) && !isNaN(t)) setTotalCOP(Math.round(v * t).toString())
   }
 
   // ── Precio unitario ──────────────────────────────────────────────────
@@ -183,7 +168,13 @@ export default function FormularioOperacion({ activos, crearOperacion, crearActi
                 key={val}
                 className="flex items-center gap-2 border rounded-lg px-4 py-3 cursor-pointer hover:bg-gray-50"
               >
-                <input type="radio" name="type" value={val} required />
+                <input
+                  type="radio"
+                  name="type"
+                  value={val}
+                  required
+                  onChange={() => setTipo(val)}
+                />
                 <span className={`font-medium ${color}`}>{label}</span>
               </label>
             ))}
@@ -206,18 +197,19 @@ export default function FormularioOperacion({ activos, crearOperacion, crearActi
           </div>
         </div>
 
-        {/* 4. TRM */}
-        <div>
-          <label className="block text-sm font-medium mb-1">TRM (COP por USD)</label>
-          <input
-            name="trm"
-            type="number"
-            step="any"
-            required
-            value={trm}
-            onChange={handleTRMChange}
-            className="w-full border rounded px-3 py-2"
-          />
+        <div className="flex gap-4 text-xs text-gray-400 bg-gray-50 rounded-lg px-4 py-3">
+          <span>
+            TRM:{" "}
+            <span className="font-medium text-gray-600">
+              {trm ? parseFloat(trm).toLocaleString('es-CO', { minimumFractionDigits: 2 }) : 'Cargando...'}
+            </span>
+          </span>
+          <span>
+            Fecha:{" "}
+            <span className="font-medium text-gray-600">
+              {new Date(fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'long', year: 'numeric' })}
+            </span>
+          </span>
         </div>
 
         {/* 5. Precio unitario */}
@@ -251,7 +243,9 @@ export default function FormularioOperacion({ activos, crearOperacion, crearActi
 
         {/* 6. Total a invertir */}
         <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 space-y-3">
-          <p className="text-sm font-medium text-gray-700">Total a invertir</p>
+          <p className="text-sm font-medium text-gray-700">
+            {tipo === 'sell' ? 'Total venta' : 'Total compra'}
+          </p>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs text-gray-500 mb-1">USD</label>
@@ -291,21 +285,13 @@ export default function FormularioOperacion({ activos, crearOperacion, crearActi
           <input type="hidden" name="quantity" value={cantidad} />
         </div>
 
-        {/* 7. Fecha */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Fecha de la operación</label>
-          <input
-            name="date"
-            type="date"
-            required
-            className="w-full border rounded px-3 py-2"
-          />
-        </div>
+        <input type="hidden" name="trm" value={trm} />
+        <input type="hidden" name="date" value={fecha} />
 
         {/* 8. Registrar */}
         <button
           type="submit"
-          disabled={!cantidad}
+          disabled={tipo === 'buy' && !cantidad}
           className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Registrar operación
