@@ -4,12 +4,14 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="bg-gray-100 px-8 py-6 mt-12">
-      <div className="max-w-3xl sm:max-w-4xl xl:max-w-6xl 2xl:max-w-screen-2xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-
-        <p className="text-sm text-gray-400">
+    <footer className="bg-[#6EEDB2] w-full px-6 xl:px-12 2xl:px-24 py-3">
+      <div className="flex flex-row justify-between items-center">
+        <p className="text-sm text-gray-700">
           {"Designed by "}
-          <a href="https://www.linkedin.com/in/tu-usuario" target="_blank" rel="noopener noreferrer" className="text-violet-500 hover:text-violet-700 font-medium transition-colors">
+          <a href="https://www.linkedin.com/in/tu-usuario"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-gray-800 hover:text-gray-900 transition-colors">
             {"Tu Nombre"}
           </a>
           {" - "}
@@ -17,14 +19,19 @@ export default function Footer() {
         </p>
 
         <div className="flex gap-4 items-center">
-          <a href="https://www.linkedin.com/in/tu-usuario" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-violet-600 transition-colors">
-            <Linkedin size={20} />
+          <a href="https://www.linkedin.com/in/tu-usuario"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-700 hover:text-gray-900 transition-colors">
+            <Linkedin size={18} />
           </a>
-          <a href="https://github.com/tu-usuario" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-violet-600 transition-colors">
-            <Github size={20} />
+          <a href="https://github.com/tu-usuario"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-700 hover:text-gray-900 transition-colors">
+            <Github size={18} />
           </a>
         </div>
-
       </div>
     </footer>
   )

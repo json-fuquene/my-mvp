@@ -22,15 +22,15 @@ export default async function OperacionesPage() {
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="bg-violet-50">
-                <th className="px-6 py-3 text-left text-xs font-semibold text-violet-600 uppercase tracking-wide">Fecha</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-violet-600 uppercase tracking-wide">Activo</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-violet-600 uppercase tracking-wide">Tipo</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Cantidad</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Precio</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Total USD</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">TRM</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Total COP</th>
+              <tr className="bg-[#6EEDB2]/20">
+                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Fecha</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Activo</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Tipo</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Cantidad</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Precio</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Total USD</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">TRM</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Total COP</th>
                 <th className="px-4 py-3"></th>
               </tr>
             </thead>
@@ -41,10 +41,14 @@ export default async function OperacionesPage() {
                 return (
                   <tr key={op.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
                     <td className="px-6 py-4 text-sm text-gray-500">
-                      {new Date(op.date).toLocaleDateString('es-CO')}
+                      {new Date(op.date).toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                      {' '}
+                      <span className="text-xs text-gray-400">
+                        {new Date(op.date).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}
+                      </span>
                     </td>
                     <td className="px-4 py-4">
-                      <Link href={`/portafolio/${op.assetSymbol}`} className="hover:text-violet-600">
+                      <Link href={`/portafolio/${op.assetSymbol}`} className="hover:text-[#374151] hover:underline">
                         <span className="font-semibold text-gray-900 text-sm">{op.assetSymbol}</span>
                         <span className="text-gray-400 ml-2 text-xs">{op.asset.name}</span>
                       </Link>

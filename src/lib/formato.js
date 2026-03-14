@@ -29,9 +29,9 @@ export function formatearCantidad(valor, decimales = 8) {
 }
 
 export function colorRentabilidad(valor) {
-  if (valor === null || valor === undefined) return 'text-gray-400'
-  if (valor > 0) return 'text-green-600'
-  if (valor < 0) return 'text-red-600'
+  if (valor === null || valor === undefined) return 'text-[#314158]'
+  if (valor > 0) return 'text-[#31D492]'
+  if (valor < 0) return 'text-[#C11007]'
   return 'text-gray-600'
 }
 

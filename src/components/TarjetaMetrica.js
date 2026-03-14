@@ -1,21 +1,21 @@
 export default function TarjetaMetrica({ titulo, valor, subtitulo, color = 'gray' }) {
   const estilos = {
-    gray:  'bg-white',
-    blue:  'bg-white',
+    gray:  'bg-[#56657B]',
+    white: 'bg-white',
     green: 'bg-white',
     red:   'bg-white',
   }
 
   const coloresValor = {
-    gray:  'text-gray-800',
-    blue:  'text-violet-600',
-    green: 'text-emerald-600',
-    red:   'text-red-500',
+    gray:  'text-[#6EEDB2]',
+    white:  'text-[#314158]',
+    green: 'text-[#31D492]',
+    red:   'text-[#C11007]',
   }
 
   return (
     <div className={`${estilos[color]} rounded-2xl p-5 shadow-sm`}>
-      <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
         {titulo}
       </p>
       <p className={`text-2xl font-bold ${coloresValor[color]}`}>

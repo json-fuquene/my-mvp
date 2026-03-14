@@ -9,13 +9,13 @@ export default function NavBar() {
       <div className="flex gap-6 items-center">
         <Link
           href="/portafolio"
-          className="text-gray-500 hover:text-violet-600 font-medium text-sm transition-colors"
+          className="text-gray-700 hover:text-gray-900 font-semibold text-sm transition-colors"
         >
-          Dashboard
+          Home
         </Link>
         <Link
           href="/operaciones"
-          className="text-gray-500 hover:text-violet-600 font-medium text-sm transition-colors"
+          className="text-gray-700 hover:text-gray-900 font-semibold text-sm transition-colors"
         >
           Operaciones
         </Link>
@@ -23,7 +23,7 @@ export default function NavBar() {
       <div className="ml-auto">
         <Link
           href="/operaciones/nueva"
-          className="bg-violet-600 text-white px-4 py-2 rounded-xl hover:bg-violet-700 text-sm font-semibold transition-colors shadow-sm"
+          className="bg-[#374151] text-white px-4 py-2 rounded-xl hover:bg-gray-900 text-sm font-semibold transition-colors shadow-sm"
         >
           + Nueva operación
         </Link>

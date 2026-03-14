@@ -26,7 +26,7 @@ export default async function ActivoPage({ params }) {
 
       {/* Encabezado */}
       <div className="flex items-center gap-4">
-        <Link href="/portafolio" className="text-gray-400 hover:text-gray-600 text-sm">
+        <Link href="/portafolio" className="text-gray-400 hover:text-[#374151] text-sm transition-colors">
           ← Dashboard
         </Link>
         <div>
@@ -39,56 +39,55 @@ export default async function ActivoPage({ params }) {
       {posicion ? (
         <section className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <TarjetaMetrica
-            titulo="Cantidad disponible"
-            valor={formatearCantidad(posicion.quantity)}
-            color="blue"
-          />
-          <TarjetaMetrica
-            titulo="Precio promedio"
-            valor={formatearUSD(posicion.avgPrice)}
-            color="blue"
-          />
-          <TarjetaMetrica
-            titulo="Precio actual (USD)"
-            valor={formatearUSD(posicion.currentPrice)}
-            color="gray"
-          />
-          <TarjetaMetrica
-            titulo="Total (USD)"
-            valor={formatearUSD(posicion.totalCostUSD)}
-            color="blue"
-          />
-          <TarjetaMetrica
-            titulo="Total (COP)"
-            valor={formatearCOP(posicion.totalCostCOP)}
-            color="gray"
-          />
-          
-          <TarjetaMetrica
-            titulo="Precio actual (USD)"
+            titulo="Valor actual (USD)"
             valor={formatearUSD(posicion.currentValueUSD)}
             color={posicion.profitLossUSD >= 0 ? 'green' : 'red'}
           />
           <TarjetaMetrica
-            titulo="Precio actual (COP)"
+            titulo="Valor actual (COP)"
             valor={formatearCOP(posicion.currentValueCOP)}
             color={posicion.profitLossUSD >= 0 ? 'green' : 'red'}
+          />
+          <TarjetaMetrica
+            titulo="Precio promedio"
+            valor={formatearUSD(posicion.avgPrice)}
+            color="white"
+          />
+          <TarjetaMetrica
+            titulo="Total compra(USD)"
+            valor={formatearUSD(posicion.totalCostUSD)}
+            color="white"
+          />
+          <TarjetaMetrica
+            titulo="Total compra(COP)"
+            valor={formatearCOP(posicion.totalCostCOP)}
+            color="white"
+          />
+          <TarjetaMetrica
+            titulo="Precio mercado (USD)"
+            valor={formatearUSD(posicion.currentPrice)}
+            color="white"
+          />
+          <TarjetaMetrica
+            titulo="Rentabilidad (USD)"
+            valor={formatearUSD(posicion.profitLossUSD)}
+            color={posicion.profitLossUSD > 0 ? 'green' : posicion.profitLossUSD < 0 ? 'red' : 'white'}
           />
           <TarjetaMetrica
             titulo="Rentabilidad (COP)"
             valor={formatearCOP(posicion.profitLossCOP)}
             subtitulo={`TRM: ${posicion.trmActual ? posicion.trmActual.toFixed(2) : '—'}`}
-            color={posicion.profitLossCOP > 0 ? 'green' : posicion.profitLossCOP < 0 ? 'red' : 'gray'}
-          />
-          <TarjetaMetrica
-            titulo="Rentabilidad (USD)"
-            valor={formatearUSD(posicion.profitLossUSD)}
-            color={posicion.profitLossUSD > 0 ? 'green' : posicion.profitLossUSD < 0 ? 'red' : 'gray'}
+            color={posicion.profitLossCOP > 0 ? 'green' : posicion.profitLossCOP < 0 ? 'red' : 'white'}
           />
           <TarjetaMetrica
             titulo="Rentabilidad (%)"
             valor={formatearPorcentaje(posicion.profitLossPct)}
-            color={posicion.profitLossPct > 0 ? 'green' : posicion.profitLossPct < 0 ? 'red' : 'gray'}
+            color={posicion.profitLossPct > 0 ? 'green' : posicion.profitLossPct < 0 ? 'red' : 'white'}
+          />
+          <TarjetaMetrica
+            titulo="Cantidad disponible"
+            valor={formatearCantidad(posicion.quantity)}
+            color="white"
           />
         </section>
       ) : (
@@ -106,14 +105,14 @@ export default async function ActivoPage({ params }) {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[700px]">
               <thead>
-                <tr className="bg-violet-50">
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-violet-600 uppercase tracking-wide">Fecha</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-violet-600 uppercase tracking-wide">Tipo</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Cantidad</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Precio</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Total USD</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">TRM</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Total COP</th>
+                <tr className="bg-[#6EEDB2]/20">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Fecha</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Tipo</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Cantidad</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Precio</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Total USD</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">TRM</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Total COP</th>
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
@@ -124,7 +123,11 @@ export default async function ActivoPage({ params }) {
                   return (
                 <tr key={op.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
                   <td className="px-6 py-4 text-sm text-gray-500">
-                    {new Date(op.date).toLocaleDateString('es-CO')}
+                    {new Date(op.date).toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                    {' '}
+                    <span className="text-xs text-gray-400">
+                      {new Date(op.date).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}
+                    </span>
                   </td>
                   <td className="px-4 py-4">
                     <span className={`text-xs font-semibold px-2 py-1 rounded-full ${

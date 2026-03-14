@@ -2,10 +2,11 @@
 
 @theme {
   --font-jakarta: 'Plus Jakarta Sans', sans-serif;
-
-  --color-primary:    #7c3aed;
+  --color-primary:       #7c3aed;
   --color-primary-hover: #6d28d9;
   --color-primary-light: #ede9fe;
+  --color-brand:         #6EEDB2;
+  --color-brand-hover:   #4dd99a;
 }
 
 body {

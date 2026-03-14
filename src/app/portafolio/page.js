@@ -20,7 +20,7 @@ export default async function PortafolioPage() {
       {/* Título */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Overview</h1>
           <p className="text-sm text-gray-400 mt-1">
             TRM actual:{' '}
             <span className="font-medium text-gray-600">
@@ -36,7 +36,7 @@ export default async function PortafolioPage() {
           titulo="Total invertido"
           valor={formatearUSD(summary.totalCostUSD)}
           subtitulo={formatearCOP(summary.totalCostCOP)}
-          color="blue"
+          color="gray"
         />
         <TarjetaMetrica
           titulo="Valor actual"
@@ -53,7 +53,7 @@ export default async function PortafolioPage() {
         <TarjetaMetrica
           titulo="Posiciones activas"
           valor={positions.length}
-          color="gray"
+          color="white"
         />
       </section>
 
@@ -72,13 +72,13 @@ export default async function PortafolioPage() {
           ) : (
             <table className="w-full min-w-[700px]">
               <thead>
-                <tr className="bg-violet-50">
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-violet-600 uppercase tracking-wide">Activo</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Cantidad</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Precio actual</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Valor (USD)</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Exposición</th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-violet-600 uppercase tracking-wide">Rentabilidad</th>
+                <tr className="bg-[#6EEDB2]/20">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Activo</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Cantidad</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Precio actual</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Valor (USD)</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Exposición</th>
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Rentabilidad</th>
                 </tr>
               </thead>
               <tbody>
@@ -88,7 +88,7 @@ export default async function PortafolioPage() {
                     className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}
                   >
                     <td className="px-6 py-4">
-                      <Link href={`/portafolio/${pos.symbol}`} className="hover:text-violet-600">
+                      <Link href={`/portafolio/${pos.symbol}`} className="hover:text-[#374151] hover:underline">
                         <span className="font-semibold text-gray-900">{pos.symbol}</span>
                         <span className="text-gray-400 text-xs ml-2">{pos.name}</span>
                       </Link>

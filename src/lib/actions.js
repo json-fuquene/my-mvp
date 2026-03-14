@@ -31,7 +31,7 @@ export async function crearOperacion(formData) {
     currency:    formData.get('currency'),
     trm:         parseFloat(formData.get('trm')),
     commission:  parseFloat(formData.get('commission') || '0'),
-    date:        new Date(formData.get('date'))
+    date: new Date()
   }
 
   // Validación básica

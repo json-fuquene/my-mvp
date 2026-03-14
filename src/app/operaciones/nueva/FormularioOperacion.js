@@ -151,7 +151,7 @@ export default function FormularioOperacion({ activos, crearOperacion, crearActi
               </select>
               <button
                 type="submit"
-                className="bg-gray-700 text-white px-4 py-2 rounded text-sm hover:bg-gray-800"
+                className="bg-[#6EEDB2] text-[#374151] px-4 py-2 rounded text-sm font-semibold hover:bg-[#4dd99a] transition-colors"
               >
                 Guardar activo
               </button>
@@ -292,7 +292,7 @@ export default function FormularioOperacion({ activos, crearOperacion, crearActi
         <button
           type="submit"
           disabled={tipo === 'buy' && !cantidad}
-          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full bg-[#6EEDB2] text-[#374151] py-3 rounded-lg hover:bg-[#4dd99a] font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           Registrar operación
         </button>
