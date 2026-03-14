@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import BotonExportar from './BotonExportar'
 import { getOperaciones } from '@/lib/actions'
 import { formatearUSD, formatearCOP, formatearCantidad } from '@/lib/formato'
 
@@ -9,12 +10,15 @@ export default async function OperacionesPage() {
     <main className="max-w-5xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Historial de operaciones</h1>
-        <Link
-          href="/operaciones/nueva"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
-        >
-          + Nueva operación
-        </Link>
+        <div className="flex gap-2">
+          <BotonExportar />
+          <Link
+            href="/operaciones/nueva"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
+          >
+            + Nueva operación
+          </Link>
+        </div>
       </div>
 
       {operaciones.length === 0 ? (

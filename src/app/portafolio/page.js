@@ -1,5 +1,6 @@
 import { getPortafolio } from '@/lib/actions'
 import TarjetaMetrica from '@/components/TarjetaMetrica'
+import GraficaDistribucion from '@/components/GraficaDistribucion'
 import Link from 'next/link'
 import {
   formatearUSD,
@@ -115,6 +116,16 @@ export default async function PortafolioPage() {
         </div>
     )}
     </section>
+    
+    {/* Gráfica de distribución */}
+    {positions.length > 0 && (
+    <section>
+        <h2 className="text-lg font-semibold mb-3">Distribución del portafolio</h2>
+        <div className="bg-white rounded-lg shadow-sm p-6">
+        <GraficaDistribucion positions={positions} />
+        </div>
+    </section>
+    )}
 
     {/* Distribución por tipo de activo */}
     <section>

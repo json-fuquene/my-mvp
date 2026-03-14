@@ -136,3 +136,35 @@ export async function getActivo(symbol) {
     where: { symbol: symbol.toUpperCase() }
   })
 }
+
+export async function exportarCSV() {
+  const operaciones = await prisma.operation.findMany({
+    include: { asset: true },
+    orderBy: { date: 'desc' }
+  })
+
+  const filas = [
+    // Encabezado
+    ['Fecha', 'Activo', 'Nombre', 'Tipo', 'Cantidad', 'Precio', 'Moneda', 'TRM', 'Comision', 'Total USD', 'Total COP'].join(','),
+    // Datos
+    ...operaciones.map(op => {
+      const totalUSD = op.quantity * op.price + op.commission
+      const totalCOP = totalUSD * op.trm
+      return [
+        new Date(op.date).toLocaleDateString('es-CO'),
+        op.assetSymbol,
+        op.asset.name,
+        op.type === 'buy' ? 'Compra' : 'Venta',
+        op.quantity,
+        op.price,
+        op.currency,
+        op.trm,
+        op.commission,
+        totalUSD.toFixed(2),
+        Math.round(totalCOP)
+      ].join(',')
+    })
+  ]
+
+  return filas.join('\n')
+}
