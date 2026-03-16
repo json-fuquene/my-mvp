@@ -3,14 +3,21 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 const COLORES = [
-  '#6EEDB2', // marca
-  '#99ffdb', // frozen-water 200
-  '#b4e4b6', // light-green 200
-  '#8ed791', // light-green 300
-  '#bfd9d0', // muted-teal 200
-  '#9fc6b9', // muted-teal 300
-  '#b9dfce', // emerald-depths 200
-  '#95d0b5', // emerald-depths 300
+  '#6EEDB2', // menta marca
+  '#A8D8EA', // azul cielo suave
+  '#B5C8F0', // azul lavanda
+  '#C3B8E8', // violeta suave
+  '#F0C4D4', // rosa pálido
+  '#F7D9A8', // durazno suave
+  '#FAE8A0', // amarillo crema
+  '#B8E6C1', // verde menta claro
+  '#A8DDD4', // turquesa suave
+  '#D4C5B0', // beige cálido
+  '#C8DEB8', // verde sage
+  '#B8C8D8', // gris azulado
+  '#E8C4B8', // salmón suave
+  '#C4D8B8', // verde oliva claro
+  '#D8B8D4', // malva suave
 ]
 
 export default function GraficaDistribucion({ positions }) {
@@ -28,14 +35,14 @@ export default function GraficaDistribucion({ positions }) {
   }
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={350}>
       <PieChart>
         <Pie
           data={datos}
-          cx="50%"
+          cx="40%"
           cy="50%"
-          innerRadius={70}
-          outerRadius={120}
+          innerRadius={50}
+          outerRadius={70}
           paddingAngle={3}
           dataKey="value"
         >
@@ -45,9 +52,13 @@ export default function GraficaDistribucion({ positions }) {
         </Pie>
         <Tooltip formatter={formatearTooltip} />
         <Legend
+          layout="vertical"
+          align="right"
+          verticalAlign="middle"
           formatter={(value) => (
-            <span style={{ color: '#314158', fontSize: '12px' }}>{value}</span>
+            <span style={{ color: '#374151', fontSize: '11px' }}>{value}</span>
           )}
+          wrapperStyle={{ paddingTop: '8px', lineHeight: '20px' }}
         />
       </PieChart>
     </ResponsiveContainer>

@@ -58,10 +58,10 @@ export default async function PortafolioPage() {
       </section>
 
       {/* Tabla + Gráfica lado a lado */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+      <section className="flex flex-col lg:flex-row gap-6 items-start">
 
         {/* Tabla de posiciones — ocupa 2/3 */}
-        <div className="lg:col-span-2 2xl:col-span-3 bg-white rounded-2xl shadow-sm overflow-hidden">
+        <div className="flex-1 bg-white rounded-2xl shadow-sm overflow-hidden min-w-0">
           <div className="overflow-x-auto">
           <div className="px-6 py-4 border-b border-gray-50">
             <h2 className="text-base font-semibold text-gray-800">Posiciones actuales</h2>
@@ -118,7 +118,7 @@ export default async function PortafolioPage() {
 
         {/* Gráfica — ocupa 1/3 */}
         {positions.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-sm p-6">
+          <div className="bg-white rounded-2xl shadow-sm p-6 lg:w-80 lg:sticky lg:top-6">
             <h2 className="text-base font-semibold text-gray-800 mb-4">Distribución</h2>
             <GraficaDistribucion positions={positions} />
           </div>
