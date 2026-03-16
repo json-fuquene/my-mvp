@@ -3,14 +3,14 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 const COLORES = [
-  '#6EEDB2', // menta marca
-  '#A8D8EA', // azul pastel
-  '#FFD6A5', // naranja pastel
-  '#FDFFB6', // amarillo pastel
-  '#C9B8E8', // violeta pastel
-  '#FFB3C6', // rosa pastel
-  '#B5EAD7', // verde pastel
-  '#AEC6CF', // gris azulado pastel
+  '#6EEDB2', // marca
+  '#99ffdb', // frozen-water 200
+  '#b4e4b6', // light-green 200
+  '#8ed791', // light-green 300
+  '#bfd9d0', // muted-teal 200
+  '#9fc6b9', // muted-teal 300
+  '#b9dfce', // emerald-depths 200
+  '#95d0b5', // emerald-depths 300
 ]
 
 export default function GraficaDistribucion({ positions }) {
@@ -44,7 +44,11 @@ export default function GraficaDistribucion({ positions }) {
           ))}
         </Pie>
         <Tooltip formatter={formatearTooltip} />
-        <Legend />
+        <Legend
+          formatter={(value) => (
+            <span style={{ color: '#314158', fontSize: '12px' }}>{value}</span>
+          )}
+        />
       </PieChart>
     </ResponsiveContainer>
   )

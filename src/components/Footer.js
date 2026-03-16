@@ -12,20 +12,20 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="font-semibold text-gray-800 hover:text-gray-900 transition-colors">
-            {"Tu Nombre"}
+            {"Jeisson Fuquene"}
           </a>
           {" - "}
           {year}
         </p>
 
         <div className="flex gap-4 items-center">
-          <a href="https://www.linkedin.com/in/tu-usuario"
+          <a href="https://www.linkedin.com/in/jeisson-fuquene/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-700 hover:text-gray-900 transition-colors">
             <Linkedin size={18} />
           </a>
-          <a href="https://github.com/tu-usuario"
+          <a href="https://github.com/json-fuquene"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-700 hover:text-gray-900 transition-colors">
