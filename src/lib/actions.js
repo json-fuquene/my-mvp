@@ -31,10 +31,9 @@ export async function crearOperacion(formData) {
     currency:    formData.get('currency'),
     trm:         parseFloat(formData.get('trm')),
     commission:  parseFloat(formData.get('commission') || '0'),
-    date: new Date()
+    date:        new Date()
   }
 
-  // Validación básica
   if (!data.assetSymbol || !data.type || isNaN(data.quantity) ||
       isNaN(data.price) || !data.currency || isNaN(data.trm) || !data.date) {
     throw new Error('Todos los campos obligatorios deben estar completos')
@@ -67,33 +66,56 @@ export async function getPortafolio() {
     orderBy: { date: 'asc' }
   })
 
-  // Obtener símbolos únicos
   const symbols = [...new Set(operaciones.map(op => op.assetSymbol))]
 
-  // Obtener precios y TRM en paralelo
-  let precios = {}
+  // 1. Obtiene TRM primero
   let trmActual = null
-
   try {
-    const { obtenerPrecios, obtenerTRMActual } = await import('@/lib/precios')
-    ;[precios, trmActual] = await Promise.all([
-      obtenerPrecios(symbols),
-      obtenerTRMActual()
-    ])
+    const { obtenerTRMActual } = await import('@/lib/precios')
+    trmActual = await obtenerTRMActual()
   } catch (error) {
-    console.warn('Error obteniendo datos externos:', error.message)
+    console.warn('Error obteniendo TRM:', error.message)
   }
 
+  // 2. Obtiene activos BVC con precio manual y convierte COP → USD
+  const activosDB = await prisma.asset.findMany({
+    where:  { symbol: { in: symbols } },
+    select: { symbol: true, manualPrice: true, isBVC: true }
+  })
+
+  const preciosManuales = Object.fromEntries(
+    activosDB
+      .filter(a => a.isBVC && a.manualPrice !== null)
+      .map(a => [a.symbol, trmActual
+        ? parseFloat((a.manualPrice / trmActual).toFixed(4))
+        : null
+      ])
+  )
+
+  // 3. Obtiene precios automáticos pasando los manuales
+  let precios = {}
+  try {
+    const { obtenerPrecios } = await import('@/lib/precios')
+    precios = await obtenerPrecios(symbols, preciosManuales)
+  } catch (error) {
+    console.warn('Error obteniendo precios:', error.message)
+  }
+
+  // 4. Normaliza formato
+  precios = Object.fromEntries(
+    Object.entries(precios).map(([k, v]) => [k, v?.precio ?? v])
+  )
+
+  // 5. Calcula portafolio
   const portafolio = calcularPortafolio(operaciones, precios)
 
-  // Agregar conversión COP al resumen y posiciones
+  // 6. Enriquece con COP
   return enriquecerConCOP(portafolio, trmActual)
 }
 
 function enriquecerConCOP(portafolio, trmActual) {
   const { positions, summary } = portafolio
 
-  // Enriquecer cada posición
   const positionsEnriquecidas = positions.map(pos => ({
     ...pos,
     currentValueCOP: pos.currentValueUSD !== null && trmActual
@@ -105,7 +127,6 @@ function enriquecerConCOP(portafolio, trmActual) {
     trmActual
   }))
 
-  // Enriquecer resumen
   const summaryEnriquecido = {
     ...summary,
     trmActual,
@@ -119,13 +140,15 @@ function enriquecerConCOP(portafolio, trmActual) {
 
   return {
     positions: positionsEnriquecidas,
-    summary: summaryEnriquecido
+    summary:   summaryEnriquecido
   }
 }
 
+// ── Activo individual ─────────────────────────────────
+
 export async function getOperacionesPorActivo(symbol) {
   return await prisma.operation.findMany({
-    where: { assetSymbol: symbol.toUpperCase() },
+    where:   { assetSymbol: symbol.toUpperCase() },
     include: { asset: true },
     orderBy: { date: 'desc' }
   })
@@ -137,6 +160,8 @@ export async function getActivo(symbol) {
   })
 }
 
+// ── CSV ───────────────────────────────────────────────
+
 export async function exportarCSV() {
   const operaciones = await prisma.operation.findMany({
     include: { asset: true },
@@ -144,9 +169,7 @@ export async function exportarCSV() {
   })
 
   const filas = [
-    // Encabezado
     ['Fecha', 'Activo', 'Nombre', 'Tipo', 'Cantidad', 'Precio', 'Moneda', 'TRM', 'Comision', 'Total USD', 'Total COP'].join(','),
-    // Datos
     ...operaciones.map(op => {
       const totalUSD = op.quantity * op.price + op.commission
       const totalCOP = totalUSD * op.trm
@@ -169,7 +192,8 @@ export async function exportarCSV() {
   return filas.join('\n')
 }
 
-// Eliminar operacion
+// ── Eliminar operación ────────────────────────────────
+
 export async function eliminarOperacion(id) {
   await prisma.operation.delete({
     where: { id: parseInt(id) }
@@ -178,8 +202,55 @@ export async function eliminarOperacion(id) {
   revalidatePath('/portafolio')
 }
 
+// ── TRM ───────────────────────────────────────────────
+
 export async function getTRMActual() {
   const { obtenerTRMActual } = await import('@/lib/precios')
   const trm = await obtenerTRMActual()
   return trm
+}
+
+// ── Activos por tipo ──────────────────────────────────
+
+export async function getActivosPorTipo(tipo) {
+  const activos = await prisma.asset.findMany({
+    where:   { type: tipo },
+    orderBy: { symbol: 'asc' },
+    select: {
+      id:          true,
+      symbol:      true,
+      name:        true,
+      type:        true,
+      manualPrice: true,
+      isBVC:       true,
+    }
+  })
+
+  const symbols = activos.map(a => a.symbol)
+  let precios   = {}
+
+  try {
+    const { obtenerPrecios } = await import('@/lib/precios')
+    precios = await obtenerPrecios(symbols)
+  } catch (error) {
+    console.warn('Error obteniendo precios:', error.message)
+  }
+
+  return activos.map(a => ({
+  ...a,
+  precioActual: a.isBVC
+    ? null
+    : precios[a.symbol]?.precio ?? precios[a.symbol] ?? null,
+  }))
+}
+
+// ── Precio manual ─────────────────────────────────────
+
+export async function actualizarPrecioManual(symbol, precioManual) {
+  await prisma.asset.update({
+    where: { symbol: symbol.toUpperCase() },
+    data:  { manualPrice: parseFloat(precioManual) }
+  })
+  revalidatePath('/activos/stock')
+  revalidatePath('/portafolio')
 }

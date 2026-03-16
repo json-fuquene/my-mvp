@@ -18,22 +18,31 @@ const COINGECKO_IDS = {
 }
 
 // Función principal — obtiene precios para una lista de símbolos
-export async function obtenerPrecios(symbols) {
+export async function obtenerPrecios(symbols, activosConPrecioManual = {}) {
   if (!symbols || symbols.length === 0) return {}
 
-  // Separar cripto de acciones/ETFs
-  const cripto  = symbols.filter(s => COINGECKO_IDS[s])
-  const acciones = symbols.filter(s => !COINGECKO_IDS[s])
+  const cripto    = symbols.filter(s => COINGECKO_IDS[s])
+  const acciones  = symbols.filter(s => !COINGECKO_IDS[s] && !activosConPrecioManual[s])
+  const manuales  = symbols.filter(s => activosConPrecioManual[s])
 
-  // Obtener precios en paralelo
   const [preciosCripto, preciosAcciones] = await Promise.allSettled([
-    cripto.length > 0   ? fetchCoinGecko(cripto)   : Promise.resolve({}),
-    acciones.length > 0 ? fetchYahooFinance(acciones) : Promise.resolve({})
+    cripto.length   > 0 ? fetchCoinGecko(cripto)      : Promise.resolve({}),
+    acciones.length > 0 ? fetchYahooFinance(acciones)  : Promise.resolve({})
   ])
+
+  // Precios manuales en COP — los convertimos a USD usando TRM
+  const preciosManuales = {}
+  for (const symbol of manuales) {
+    const precioCOP = activosConPrecioManual[symbol]
+    if (precioCOP) {
+      preciosManuales[symbol] = { precio: precioCOP, manual: true }
+    }
+  }
 
   return {
     ...(preciosCripto.status   === 'fulfilled' ? preciosCripto.value   : {}),
-    ...(preciosAcciones.status === 'fulfilled' ? preciosAcciones.value : {})
+    ...(preciosAcciones.status === 'fulfilled' ? preciosAcciones.value : {}),
+    ...preciosManuales
   }
 }
 

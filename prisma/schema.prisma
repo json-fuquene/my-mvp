@@ -8,13 +8,14 @@ datasource db {
 }
 
 model Asset {
-  id        Int         @id @default(autoincrement())
-  symbol    String      @unique
-  name      String
-  type      String      // "stock" | "etf" | "crypto"
-  createdAt DateTime    @default(now())
-
-  operations Operation[]
+  id          Int         @id @default(autoincrement())
+  symbol      String      @unique
+  name        String
+  type        String
+  manualPrice Float?
+  isBVC       Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  operations  Operation[]
 }
 
 model Operation {

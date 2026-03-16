@@ -53,3 +53,30 @@ export async function POST(request) {
     )
   }
 }
+
+// PATCH /api/assets — Actualiza el precio manual de un activo
+export async function PATCH(request) {
+  try {
+    const body = await request.json()
+    const { symbol, manualPrice } = body
+
+    if (!symbol || manualPrice === undefined) {
+      return NextResponse.json(
+        { error: 'symbol y manualPrice son requeridos' },
+        { status: 400 }
+      )
+    }
+
+    const asset = await prisma.asset.update({
+      where: { symbol: symbol.toUpperCase() },
+      data:  { manualPrice: parseFloat(manualPrice) }
+    })
+
+    return NextResponse.json(asset)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Error al actualizar precio' },
+      { status: 500 }
+    )
+  }
+}
