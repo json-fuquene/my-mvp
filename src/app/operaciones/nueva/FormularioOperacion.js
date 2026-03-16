@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 export default function FormularioOperacion({ activos, crearOperacion, crearActivo, trmInicial, fechaInicial }) {
-  const [mostrarNuevoActivo, setMostrarNuevoActivo] = useState(false)
+  // const [mostrarNuevoActivo, setMostrarNuevoActivo] = useState(false)
   const [listaActivos, setListaActivos]             = useState(activos)
   const [activoSeleccionado, setActivoSeleccionado] = useState('')
   const [tipo, setTipo]                             = useState('')
@@ -87,13 +87,25 @@ export default function FormularioOperacion({ activos, crearOperacion, crearActi
 
   // ── Nuevo activo ─────────────────────────────────────────────────────
 
-  async function handleNuevoActivo(formData) {
-    await crearActivo(formData)
-    setMostrarNuevoActivo(false)
-    const res  = await fetch('/api/assets')
-    const data = await res.json()
-    setListaActivos(data)
-  }
+  async function handleNuevoActivo() {
+  const symbol = document.getElementById('nuevo-symbol').value
+  const name   = document.getElementById('nuevo-name').value
+  const type   = document.getElementById('nuevo-type').value
+
+  if (!symbol || !name || !type) return
+
+  const formData = new FormData()
+  formData.append('symbol', symbol)
+  formData.append('name', name)
+  formData.append('type', type)
+
+  await crearActivo(formData)
+  setMostrarNuevoActivo(false)
+
+  const res  = await fetch('/api/assets')
+  const data = await res.json()
+  setListaActivos(data)
+}
 
   // ── Render ───────────────────────────────────────────────────────────
 
@@ -119,44 +131,43 @@ export default function FormularioOperacion({ activos, crearOperacion, crearActi
                 </option>
               ))}
             </select>
-            <button
+            {/* <button
               type="button"
               onClick={() => setMostrarNuevoActivo(!mostrarNuevoActivo)}
               className="border px-3 py-2 rounded text-sm hover:bg-gray-100 whitespace-nowrap"
             >
               + Nuevo
-            </button>
+            </button> */}
           </div>
 
-          {mostrarNuevoActivo && (
-            <form action={handleNuevoActivo} className="mt-3 bg-gray-50 border rounded-lg p-4 space-y-3">
+          {/* {mostrarNuevoActivo && (
+            <div className="mt-3 bg-gray-50 border rounded-lg p-4 space-y-3">
               <p className="text-sm font-medium">Registrar nuevo activo</p>
               <input
-                name="symbol"
+                id="nuevo-symbol"
                 placeholder="Símbolo (ej. AAPL)"
-                required
                 className="w-full border rounded px-3 py-2 text-sm"
               />
               <input
-                name="name"
+                id="nuevo-name"
                 placeholder="Nombre (ej. Apple Inc.)"
-                required
                 className="w-full border rounded px-3 py-2 text-sm"
               />
-              <select name="type" required className="w-full border rounded px-3 py-2 text-sm">
+              <select id="nuevo-type" className="w-full border rounded px-3 py-2 text-sm">
                 <option value="">Tipo de activo</option>
                 <option value="stock">Acción</option>
                 <option value="etf">ETF</option>
                 <option value="crypto">Criptomoneda</option>
               </select>
               <button
-                type="submit"
+                type="button"
+                onClick={handleNuevoActivo}
                 className="bg-[#6EEDB2] text-[#374151] px-4 py-2 rounded text-sm font-semibold hover:bg-[#4dd99a] transition-colors"
               >
                 Guardar activo
               </button>
-            </form>
-          )}
+            </div>
+          )} */}
         </div>
 
         {/* 2. Tipo */}

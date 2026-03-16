@@ -1,10 +1,20 @@
 // Mapa de símbolos a IDs de CoinGecko
 const COINGECKO_IDS = {
-  BTC:  'bitcoin',
-  ETH:  'ethereum',
-  SOL:  'solana',
-  ADA:  'cardano',
-  USDT: 'tether',
+  BTC:   'bitcoin',
+  ETH:   'ethereum',
+  BNB:   'binancecoin',
+  SOL:   'solana',
+  XRP:   'ripple',
+  ADA:   'cardano',
+  AVAX:  'avalanche-2',
+  DOT:   'polkadot',
+  MATIC: 'matic-network',
+  LINK:  'chainlink',
+  UNI:   'uniswap',
+  ATOM:  'cosmos',
+  LTC:   'litecoin',
+  DOGE:  'dogecoin',
+  SHIB:  'shiba-inu',
 }
 
 // Función principal — obtiene precios para una lista de símbolos
@@ -34,7 +44,7 @@ async function fetchCoinGecko(symbols) {
   const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`
 
   const res = await fetch(url, {
-    next: { revalidate: 60 } // cache de 60 segundos en Next.js
+    next: { revalidate: 900 } // cache de 15 minutos en Next.js
   })
 
   if (!res.ok) throw new Error(`CoinGecko error: ${res.status}`)
@@ -65,7 +75,7 @@ async function fetchYahooFinance(symbols) {
       const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`
 
       const res = await fetch(url, {
-        next: { revalidate: 60 },
+        next: { revalidate: 900 }, // cache de 15 minutos en Next.js
         headers: {
           'User-Agent': 'Mozilla/5.0'
         }
