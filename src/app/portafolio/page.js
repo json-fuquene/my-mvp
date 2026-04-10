@@ -47,7 +47,7 @@ export default async function PortafolioPage() {
         <TarjetaMetrica
           titulo="Rentabilidad"
           valor={formatearPorcentaje(summary.totalProfitLossPct)}
-          subtitulo={formatearUSD(summary.totalProfitLossUSD)}
+          subtitulo={formatearCOP(summary.totalProfitLossCOP)}
           color={summary.totalProfitLossPct > 0 ? 'green' : summary.totalProfitLossPct < 0 ? 'red' : 'gray'}
         />
         <TarjetaMetrica
@@ -76,7 +76,7 @@ export default async function PortafolioPage() {
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Activo</th>
                   <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Cantidad</th>
                   <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Precio actual</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Valor (USD)</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Valor</th>
                   <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Exposición</th>
                   <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide">Rentabilidad</th>
                 </tr>
@@ -97,10 +97,12 @@ export default async function PortafolioPage() {
                       {formatearCantidad(pos.quantity)}
                     </td>
                     <td className="px-4 py-4 text-right text-sm text-gray-600">
-                      {formatearUSD(pos.currentPrice)}
+                      <div>{formatearUSD(pos.currentPrice)}</div>
+                      <div className="text-xs text-gray-400">{formatearCOP(pos.currentPriceCOP)}</div>
                     </td>
                     <td className="px-4 py-4 text-right text-sm font-medium text-gray-800">
-                      {formatearUSD(pos.currentValueUSD)}
+                      <div>{formatearUSD(pos.currentValueUSD)}</div>
+                      <div className="text-xs text-gray-400">{formatearCOP(pos.currentValueCOP)}</div>
                     </td>
                     <td className="px-4 py-4 text-right text-sm text-gray-500">
                       {formatearPorcentaje(pos.exposurePct)}

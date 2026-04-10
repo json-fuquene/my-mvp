@@ -118,6 +118,9 @@ function enriquecerConCOP(portafolio, trmActual) {
 
   const positionsEnriquecidas = positions.map(pos => ({
     ...pos,
+    currentPriceCOP: pos.currentPrice !== null && trmActual
+      ? Math.round(pos.currentPrice * trmActual)
+      : null,
     currentValueCOP: pos.currentValueUSD !== null && trmActual
       ? Math.round(pos.currentValueUSD * trmActual)
       : null,
